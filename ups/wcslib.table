@@ -1,3 +1,4 @@
 setupRequired(cfitsio)
 pathPrepend(LD_LIBRARY_PATH, ${PRODUCT_DIR}/lib)
 pathPrepend(DYLD_LIBRARY_PATH, ${PRODUCT_DIR}/lib)
+pathPrepend(LSST_LIBRARY_PATH, ${PRODUCT_DIR}/lib)
