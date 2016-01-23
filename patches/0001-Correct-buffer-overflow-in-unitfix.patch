@@ -1,0 +1,31 @@
+From 6260cf65720599c364ecbebf8c1045366c632e65 Mon Sep 17 00:00:00 2001
+From: John Swinbank <swinbank@princeton.edu>
+Date: Sat, 23 Jan 2016 10:17:13 -0500
+Subject: [PATCH] Correct buffer overflow in unitfix().
+
+The unitfix() function converts strings describing units into a normalized
+form. It writes a note of all strings converted to a fixed sized buffer.
+Previously, it did not check the size of the buffer and thus could overflow.
+This eliminates the overflow, at the cost of not properly logging some
+conversions.
+---
+ C/wcsfix.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/C/wcsfix.c b/C/wcsfix.c
+index 3384b02..a4d760c 100644
+--- a/C/wcsfix.c
++++ b/C/wcsfix.c
+@@ -427,7 +427,8 @@ int unitfix(int ctrl, struct wcsprm *wcs)
+     strncpy(orig_unit, wcs->cunit[i], 80);
+     if (wcsutrne(ctrl, wcs->cunit[i], &(wcs->err)) == 0) {
+       k = strlen(msg);
+-      sprintf(msg+k, "'%s' -> '%s', ", orig_unit, wcs->cunit[i]);
++      snprintf(msg+k, WCSERR_MSG_LENGTH-k,
++               "'%s' -> '%s', ", orig_unit, wcs->cunit[i]);
+       status = FIXERR_UNITS_ALIAS;
+     }
+   }
+-- 
+2.7.0
+
