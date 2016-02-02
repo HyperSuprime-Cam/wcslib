@@ -1,0 +1,22 @@
+commit 713f377f250bbb2fdd1efe61d52f19ef51e2edff
+Author: Colin Slater <ctslater@uw.edu>
+Date:   Tue Feb 2 10:00:28 2016 -0800
+
+    Generate a shared library on OS X.
+    
+    This resolves DM-1221, which noted that wcslib was being statically linked on OS
+    X. The issue has been reported upstream.
+
+diff --git a/configure b/configure
+index 8171bc9..075fbe7 100755
+--- a/configure
++++ b/configure
+@@ -6879,7 +6879,7 @@ if test "x$ac_cv_c_compiler_gnu" = xyes ; then
+     SONAME="libwcs.$SHVER.dylib"
+     SHRLD="$SHRLD -dynamiclib -single_module"
+     SHRLD="$SHRLD -compatibility_version $SHVER -current_version $LIBVER"
+-    SHRLN=
++    SHRLN="libwcs.dylib"
+ 
+     case "$build_cpu" in
+     powerpc*)
